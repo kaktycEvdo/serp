@@ -1,7 +1,7 @@
 <?php
 require_once "tfpdf/tfpdf.php";
-require_once "models/user.php";
 require_once "connect_to_db.php";
+include_once "org.php";
 
 $q = $pdo->prepare("SELECT * FROM resources");
 $q->execute();

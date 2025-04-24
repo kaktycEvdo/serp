@@ -6,12 +6,10 @@ import {
   Scripts,
   ScrollRestoration,
 } from "react-router";
-// import { useState } from "react";
 import { Header } from "./components/UI/Header.jsx";
 import { Footer } from "./components/UI/Footer.jsx";
 
 import stylesheet from "./app.css?url";
-import { useState } from "react";
 
 export const links = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -27,11 +25,7 @@ export const links = () => [
   { rel: "stylesheet", href: stylesheet },
 ];
 
-// const [user, setUser] = useState(0);
-
 export function Layout({ children }) {
-  // it's actually email
-  let [user, setUser] = useState(null);
   return (
     <html lang="en">
       <head>
@@ -41,7 +35,7 @@ export function Layout({ children }) {
         <Links />
       </head>
       <body className="flex flex-col h-screen">
-        <Header user={user} setUser={setUser} />
+        <Header />
         <div className="flex h-full w-screen justify-center flex-col items-center">
         {children}
         </div>
@@ -54,7 +48,7 @@ export function Layout({ children }) {
 }
 
 export default function App({setUser}) {
-  return <Outlet setUser={setUser} />;
+  return <><Outlet setUser={setUser} /></>;
 }
 
 export function ErrorBoundary({ error }) {
