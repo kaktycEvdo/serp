@@ -1,5 +1,3 @@
-import ArcherElement from "react-archer";
-
 export default function LinkedResource({ resource, setThing, open, changeForm }) {
   function getDaysUntilSafestock(resource) {
     let days = 0;
