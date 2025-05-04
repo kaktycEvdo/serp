@@ -1,36 +1,66 @@
 <?php
 require_once "connect_to_db.php";
-include_once "org.php";
+require_once "org.php";
+require_once "models/all.php";
 
 if(!isset($_GET['item']) || !isset($_GET['command'])) {echo 504; die;}
-
 if(!isset($_GET['user_id'])) {echo 403; die();}
 if(!getAcception($pdo, $_GET['user_id'])) {echo 403; die();}
+error_reporting(E_ERROR | E_PARSE);
 
 $item = $_GET['item'];
 //get / getAll
 $command = $_GET['command'];
 switch($item){
     case 'everything':{
+        // i.e. [warehouse1 => [resource1 => [supplier1, supplier2], resource2 => [supplier1, supplier3]]]
         if($command == 'getAll'){
             $org = getOrg($pdo, $_GET['user_id']);
 
-            $q = $pdo->prepare("SELECT id, name, description, amount, income, consumption, safestock, price FROM resources WHERE org_id = :org");
-            $q->bindParam("org", $org);
-            if(!$q->execute()) {echo 500; die;}
-            $resources = $q->fetchAll(PDO::FETCH_ASSOC);
+            $ric = new Resource();
+            $rc = new ResourceLink();
+            $wc = new Warehouse();
+            $gc = new Goal();
+            $cc = new Company();
+            $snc = new Snapshot();
 
-            $q = $pdo->prepare("SELECT warehouse.id as id, warehouse.name as name, warehouse.description as description, address, resources.name as resources_name, resources.amount as resources_amount FROM warehouse, resources, supplied_resource WHERE supplied_resource.warehouse_id = warehouse.id and supplied_resource.resources_id = resources.id and warehouse.org_id = :org");
-            $q->bindParam("org", $org);
-            if(!$q->execute()) {echo 500; die;}
-            $warehouses = $q->fetchAll(PDO::FETCH_ASSOC);
+            $resources = $ric->getIf($pdo, "org_id = :org_id", ['org_id' => $org]);
+            $warehouses = $wc->getIf($pdo, "org_id = :org_id", ['org_id' => $org]);
+            $goals = $gc->getIf($pdo, "org_id = :org_id", ["org_id" => $org]);
+            $companies = $cc->getIf($pdo, "org_id = :org_id", ["org_id" => $org]);
+            $snapshots = $snc->getIf($pdo, "org_id = :org_id", ["org_id" => $org]);
+            
+            $resources_links = [];
+            
+            if($warehouses != null && $resources != null){
+                $supplied_resources = [];
+                $created_resources = [];
 
-            $q = $pdo->prepare("SELECT listing, name, description FROM goal WHERE org_id = :org");
-            $q->bindParam("org", $org);
-            if(!$q->execute()) {echo 500; die;}
-            $goals = $q->fetchAll(PDO::FETCH_ASSOC);
+                foreach ($resources as $resource) {
+                    $resource->amount = null;
 
-            $data = ["resources" => $resources, "warehouses" => $warehouses, "goals" => $goals];
+                    $res_links = $rc->getIf($pdo, "resource.resources_id = :r_id", ["r_id" => $resource->id]);
+                    if(!$res_links) continue;
+
+                    foreach ($res_links as $link) {
+                        if(isset($link->supplier) && $link->supplier != null){
+                            if(!$supplied_resources[$link->supplier][$link->warehouse_id]) $supplied_resources[$link->supplier][$link->warehouse_id] = [$link];
+                            else array_push($supplied_resources[$link->supplier][$link->warehouse_id], $link);
+                        }
+                        else{
+                            array_push($created_resources, $link);
+                        }
+                        $resource->amount += $link->amount;
+                        $link->resource_name = $resource->name;
+                        $link->resource = $resource;
+                    }
+                }
+                $resources_links = ["created" => $created_resources, "supplied" => $supplied_resources];
+            }
+
+
+            $data = ["resources" => $resources, "warehouses" => $warehouses, "goals" => $goals, "companies" => $companies, "snapshots" => $snapshots, "resource_links" => $resources_links];
+            header("Content-Type: application/json");
             echo json_encode($data);
         }
         else{
@@ -54,62 +84,4 @@ switch($item){
         $data = ["not_accepted" => $not_accepted, "accepted" => $accepted];
         echo json_encode($data);
     }
-    // currently deprecated for optimisational reasons
-    // case 'resources':{
-    //     if($command == 'get'){
-    //         $q = $pdo->prepare("SELECT * FROM resources WHERE id = :id");
-    //         $q->bindParam("id", $_GET['id']);
-    //         if(!$q->execute()) {echo 500; die;}
-    //         $resource = $q->fetch(PDO::FETCH_ASSOC);
-    //         echo json_encode($resource);
-    //     }
-    //     else if($command == 'getAll'){
-    //         $q = $pdo->prepare("SELECT * FROM resources");
-    //         if(!$q->execute()) {echo 500; die;}
-    //         $resources = $q->fetchAll(PDO::FETCH_ASSOC);
-    //         echo json_encode($resources);
-    //     }
-    //     else{
-    //         echo 504;
-    //     }
-    //     break;
-    // }
-    // case 'warehouses':{
-    //     if($command == 'get'){
-    //         $q = $pdo->prepare("SELECT warehouse.id as id, warehouse.name as name, warehouse.description as description, adress, resources.name as resources_name, resources.amount as resources_amount FROM warehouse LEFT JOIN resources ON warehouse.resources_id = resources.id WHERE warehouse.id = :id");
-    //         $q->bindParam("id", $_GET['id']);
-    //         if(!$q->execute()) {echo 500; die;}
-    //         $warehouse = $q->fetch(PDO::FETCH_ASSOC);
-    //         echo json_encode($resource);
-    //     }
-    //     else if($command == 'getAll'){
-    //         $q = $pdo->prepare("SELECT warehouse.id as id, warehouse.name as name, warehouse.description as description, adress, resources.name as resources_name, resources.amount as resources_amount FROM warehouse LEFT JOIN resources ON warehouse.resources_id = resources.id");
-    //         if(!$q->execute()) {echo 500; die;}
-    //         $warehouses = $q->fetchAll(PDO::FETCH_ASSOC);
-    //         echo json_encode($warehouses);
-    //     }
-    //     else{
-    //         echo 504;
-    //     }
-    //     break;
-    // }
-    // case 'suppliers':{
-    //     if($command == 'get'){
-    //         $q = $pdo->prepare("SELECT company.name, company.description, company.workhours, company.adress, resources.name, warehouse.name FROM supplier RIGHT JOIN company ON supplier.company_id = company.id RIGHT JOIN resources ON supplier.resources_id = resources.id RIGHT JOIN warehouse ON supplier.warehouse_id = warehouse.id WHERE id = :id");
-    //         $q->bindParam("id", $_GET['id']);
-    //         if(!$q->execute()) {echo 500; die;}
-    //         $supplier = $q->fetch(PDO::FETCH_ASSOC);
-    //         echo json_encode($supplier);
-    //     }
-    //     else if($command == 'getAll'){
-    //         $q = $pdo->prepare("SELECT company.name, company.description, company.workhours, company.adress, resources.name, warehouse.name FROM supplier RIGHT JOIN company ON supplier.company_id = company.id RIGHT JOIN resources ON supplier.resources_id = resources.id RIGHT JOIN warehouse ON supplier.warehouse_id = warehouse.id");
-    //         if(!$q->execute()) {echo 500; die;}
-    //         $suppliers = $q->fetchAll(PDO::FETCH_ASSOC);
-    //         echo json_encode($suppliers);
-    //     }
-    //     else{
-    //         echo 504;
-    //     }
-    //     break;
-    // }
 }
