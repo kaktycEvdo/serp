@@ -31,13 +31,15 @@ export function Auth() {
       {
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
       }
-    );
-    let text = response.data;
-    if (text) {
-      setOpened(true);
-      setStatus("success");
-      localStorage.setItem("user", text);
-    }
+    ).then((res) => {
+      let text = res.data;
+      if (text) {
+        setOpened(true);
+        setStatus("success");
+        localStorage.setItem("user", text);
+      }
+      console.log(text);
+    });
   }
 
   function changeEmail(email) {

@@ -17,13 +17,15 @@ async function exportData(email, password, create_new_org, org_name) {
     {
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
     }
-  );
-  let text = response.data;
-  if (validateEmail(text)[0] == 0) {
-    localStorage.setItem("user", text);
-    setStatus("success");
-    setOpened(true);
-  }
+  ).then((res) => {
+    let text = res.data;
+    if (validateEmail(text)[0] == 0) {
+      localStorage.setItem("user", text);
+      setStatus("success");
+      setOpened(true);
+    }
+    console.log(text);
+  });
 }
 
 function validateEmail(email) {

@@ -16,6 +16,7 @@ import Warehouses from "../components/lists/Warehouses.jsx";
 import Suppliers from "../components/lists/Suppliers.jsx";
 import AnalyticsButton from "../components/UI/AnalyticsButton.jsx";
 import { Popup } from "../components/UI/Popup.jsx";
+import { redirect } from "react-router";
 
 const url_get = "http://serp.infinityfreeapp.com/get.php?";
 const url_rq = "http://serp.infinityfreeapp.com/general_requests.php";
@@ -25,18 +26,18 @@ export function Analytics() {
 
   let [opened, changeOpened] = useState(false);
   let [opened_form, changeOpenedF] = useState(false);
-  let [opened_check, changeOpenedC] = useState(false);
   let [opened_accurate, changeOpenedA] = useState(false);
   let [opened_popup, changeOpenedPopup] = useState(false);
 
   let [popup_content, changePopupContent] = useState(null);
-  // 0 - resource, 1 - warehouse, 2 - supplier, 3 - goal
+  // 0 - resource, 1 - warehouse, 2 - supplier, 3 - goal, 4 - resourcelink, 5 - snapshot
   let [form, changeForm] = useState(0);
 
   let [thing, setThing] = useState(null);
 
   useEffect(() => {
-    axios
+    if(localStorage.getItem("user")){
+      axios
       .get(
         "http://localhost/serp/org.php?command=acception&id=" +
           localStorage.getItem("user")
@@ -92,6 +93,11 @@ export function Analytics() {
             });
         }, interval)
       );
+    }
+    else{
+      redirect('auth');
+    }
+    
   }, []);
 
   function renderForm() {
