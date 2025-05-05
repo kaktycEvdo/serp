@@ -7,7 +7,6 @@ async function exportData(email, password, create_new_org, org_name) {
   const response = await axios.post(
     url,
     {
-      mode: "cors",
       email: email,
       password: password,
       create_new_org: create_new_org,
@@ -15,7 +14,7 @@ async function exportData(email, password, create_new_org, org_name) {
       command: "reg",
     },
     {
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      headers: { "Content-Type": "application/x-www-form-urlencoded", "mode": "cors", },
     }
   ).then((res) => {
     let text = res.data;
