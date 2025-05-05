@@ -1,7 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 
-const url = "http://serp.infinityfreeapp.com/user.php";
+const url = "https://serp.infinityfreeapp.com/user.php";
 
 async function exportData(email, password, create_new_org, org_name) {
   const response = await axios.post(
