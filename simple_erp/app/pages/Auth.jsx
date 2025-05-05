@@ -2,7 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import { Modal } from "../components/UI/Modal";
 
-const url = "http://localhost/serp/user.php/";
+const url = "http://serp.infinityfreeapp.com/user.php/";
 
 function validateEmail(email) {
   if (!email.match(/[a-z0-9._-]+@[a-z]{3,}\.[a-z]{2,3}/)) {

@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import { Modal } from "../components/UI/Modal.jsx";
 import axios from "axios";
 
-const url_get = "http://localhost/serp/get.php?";
-// const url_user = "http://localhost/serp/user.php/";
+const url_get = "http://serp.infinityfreeapp.com/get.php?";
+// const url_user = "http://serp.infinityfreeapp.com/user.php/";
 
 export function UserManagement() {
   let [data, setData] = useState(null);
@@ -13,7 +13,7 @@ export function UserManagement() {
   useEffect(() => {
     axios
       .get(
-        "http://localhost/serp/org.php?command=acception&id=" +
+        "http://serp.infinityfreeapp.com/org.php?command=acception&id=" +
           localStorage.getItem("user")
       )
       .then((res) => {
@@ -25,7 +25,7 @@ export function UserManagement() {
     let interval = 2 * 1000;
     axios
       .get(
-        "http://localhost/serp/org.php?command=acception&id=" +
+        "http://serp.infinityfreeapp.com/org.php?command=acception&id=" +
           localStorage.getItem("user"),
         { mode: "cors" }
       )

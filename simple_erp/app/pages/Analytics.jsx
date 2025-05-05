@@ -17,8 +17,8 @@ import Suppliers from "../components/lists/Suppliers.jsx";
 import AnalyticsButton from "../components/UI/AnalyticsButton.jsx";
 import { Popup } from "../components/UI/Popup.jsx";
 
-const url_get = "http://localhost/serp/get.php?";
-const url_rq = "http://localhost/serp/general_requests.php";
+const url_get = "http://serp.infinityfreeapp.com/get.php?";
+const url_rq = "http://serp.infinityfreeapp.com/general_requests.php";
 
 export function Analytics() {
   let [data, setData] = useState(null);

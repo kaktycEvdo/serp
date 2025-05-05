@@ -11,7 +11,7 @@ export default function ReportModal({ close }) {
           </p>
         </div>
         <embed
-          src={"http://localhost/serp/pdf_show.php?user_id="+localStorage.getItem('user')}
+          src={"http://serp.infinityfreeapp.com/pdf_show.php?user_id="+localStorage.getItem('user')}
           height={600}
           width={450}
         />
