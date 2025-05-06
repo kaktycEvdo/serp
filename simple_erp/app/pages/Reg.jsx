@@ -15,7 +15,7 @@ async function exportData(email, password, create_new_org, org_name) {
       command: "reg",
     },
     {
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      headers: { "Content-Type": "application/x-www-form-urlencoded", "Access-Control-Allow-Origin": "https://serp.infinityfreeapp.com" },
     }
   ).then((res) => {
     let text = res.data;
