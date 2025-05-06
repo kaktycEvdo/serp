@@ -29,7 +29,7 @@ export function Auth() {
         command: "auth",
       },
       {
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        headers: { "Content-Type": "application/x-www-form-urlencoded", "Access-Control-Allow-Origin": "https://serp-chi.vercel.app" },
       }
     ).then((res) => {
       let text = res.data;
