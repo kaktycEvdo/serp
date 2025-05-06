@@ -1,5 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
+import { Popup } from "../components/UI/Popup";
 
 const url = "https://serp.infinityfreeapp.com/user.php";
 
@@ -17,7 +18,13 @@ async function exportData(email, password, create_new_org, org_name) {
     {
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
     }
-  ).then((res) => {
+  ).catch((error) => {
+    changePopupContent(
+      "Ошибка при подключении к серверу. Вывод: " + error.message
+    );
+    changeOpenedPopup(true);
+  })
+  .then((res) => {
     let text = res.data;
     if (validateEmail(text)[0] == 0) {
       localStorage.setItem("user", text);
@@ -42,6 +49,7 @@ export function Reg() {
   const [create_new_org, setCNO] = useState(" ");
   const [org_name, setOrgName] = useState(" ");
   const [can_send, setCanSend] = useState(false);
+  let [opened_popup, changeOpenedPopup] = useState(false);
 
   function changeEmail(email) {
     if (email.trim() != "") {
@@ -93,6 +101,11 @@ export function Reg() {
 
   return (
     <div className="grid lg:grid-cols-2 sm:grid-cols-1 justify-center items-center gap-5 p-5">
+    <Popup opened={opened_popup} close={() => changeOpenedPopup(false)}>
+        <div className="flex break-words whitespace-pre w-full overflow-auto">
+          {popup_content}
+        </div>
+      </Popup>
       <h1 className="break-words lg:col-start-1 lg:col-end-3 text-center">
         Регистрация
       </h1>

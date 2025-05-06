@@ -31,7 +31,14 @@ export function Auth() {
       {
         headers: { "Content-Type": "application/x-www-form-urlencoded", "Access-Control-Allow-Origin": "https://serp-chi.vercel.app" },
       }
-    ).then((res) => {
+    )
+    .catch((error) => {
+      changePopupContent(
+        "Ошибка при подключении к серверу. Вывод: " + error.message
+      );
+      changeOpenedPopup(true);
+    })
+    .then((res) => {
       let text = res.data;
       if (text) {
         setOpened(true);
@@ -76,17 +83,11 @@ export function Auth() {
 
   return (
     <>
-      <Modal opened={opened} close={() => setOpened(false)}>
-        {status == "error" ? (
-          <>
-            <h2>Ошибка авторизации</h2>
-          </>
-        ) : (
-          <>
-            <h2>Успешная авторизация</h2>
-          </>
-        )}
-      </Modal>
+      <Popup opened={opened} close={() => changeOpened(false)}>
+        <div className="flex break-words whitespace-pre w-full overflow-auto">
+          {popup_content}
+        </div>
+      </Popup>
       <div className="flex justify-center flex-col items-center">
         <div className="flex p-5 justify-center flex-col items-center gap-5 bg-gray-800 border-2 dark:border-white w-2xs">
           <h1>Авторизация</h1>
