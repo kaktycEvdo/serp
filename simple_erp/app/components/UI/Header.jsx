@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { NavLink } from "react-router";
+import imgUrl from './../../assets/icon.svg';
 
 export function Header() {
   let [menuShow, menuShowChange] = useState(false);
@@ -9,7 +10,7 @@ export function Header() {
       <nav className="h-20 flex p-5 justify-between items-center gap-5 lg:hidden w-full">
         <div>
           <NavLink to="/" end>
-            <img src="app/assets/icon.svg" alt="logo" className="h-15 w-20" />
+            <img src={imgUrl} alt="logo" className="h-15 w-20 dark:invert" />
           </NavLink>
         </div>
         <div>
@@ -19,7 +20,7 @@ export function Header() {
       <nav
         className={
           menuShow
-            ? "flex flex-col dark:bg-gray-950 right-0 absolute w-60 top-20 gap-5 items-end text-right justify-start p-5 border-l-4 border-l-emerald-600"
+            ? "flex flex-col bg-white dark:bg-gray-950 right-0 absolute w-60 top-20 gap-5 items-end text-right justify-start p-5 border-l-4 border-l-emerald-600"
             : "hidden"
         }
         style={{ height: "calc(100vh - (var(--spacing) * 20))" }}
@@ -29,7 +30,7 @@ export function Header() {
           className={({ isActive, isPending }) =>
             [
               isPending ? "text-gray-700" : "",
-              isActive ? "text-emerald-400" : "",
+              isActive ? "dark:text-emerald-400 text-emerald-600" : "",
             ].join(" ")
           }
           end
@@ -41,7 +42,7 @@ export function Header() {
           className={({ isActive, isPending }) =>
             [
               isPending ? "text-gray-700" : "",
-              isActive ? "text-emerald-400" : "",
+              isActive ? "dark:text-emerald-400 text-emerald-600" : "",
             ].join(" ")
           }
           end
@@ -53,7 +54,7 @@ export function Header() {
           className={({ isActive, isPending }) =>
             [
               isPending ? "text-gray-700" : "",
-              isActive ? "text-emerald-400" : "",
+              isActive ? "dark:text-emerald-400 text-emerald-600" : "",
             ].join(" ")
           }
           end
@@ -65,7 +66,7 @@ export function Header() {
           className={({ isActive, isPending }) =>
             [
               isPending ? "text-gray-700" : "",
-              isActive ? "text-emerald-400" : "",
+              isActive ? "dark:text-emerald-400 text-emerald-600" : "",
             ].join(" ")
           }
           end
@@ -77,7 +78,7 @@ export function Header() {
           className={({ isActive, isPending }) =>
             [
               isPending ? "text-gray-700" : "",
-              isActive ? "text-emerald-400" : "",
+              isActive ? "dark:text-emerald-400 text-emerald-600" : "",
             ].join(" ")
           }
           end
@@ -88,14 +89,14 @@ export function Header() {
       <nav className="h-20 hidden p-5 justify-between items-center gap-5 lg:flex lg:flex-row w-full">
         <div className="w-full flex flex-row gap-5 justify-start items-center">
           <NavLink to="/" end>
-            <img src="app/assets/icon.svg" alt="logo" className="h-15 w-20" />
+            <img src="app/assets/icon.svg" alt="logo" className="h-15 w-20 dark:invert" />
           </NavLink>
           <NavLink
             to="/"
             className={({ isActive, isPending }) =>
               [
                 isPending ? "text-gray-700" : "",
-                isActive ? "text-emerald-400" : "",
+                isActive ? "dark:text-emerald-400 text-emerald-600" : "",
               ].join(" ")
             }
             end
@@ -107,7 +108,7 @@ export function Header() {
             className={({ isActive, isPending }) =>
               [
                 isPending ? "text-gray-700" : "",
-                isActive ? "text-emerald-400" : "",
+                isActive ? "dark:text-emerald-400 text-emerald-600" : "",
               ].join(" ")
             }
             end
@@ -119,7 +120,7 @@ export function Header() {
             className={({ isActive, isPending }) =>
               [
                 isPending ? "text-gray-700" : "",
-                isActive ? "text-emerald-400" : "",
+                isActive ? "dark:text-emerald-400 text-emerald-600" : "",
               ].join(" ")
             }
             end
@@ -133,7 +134,7 @@ export function Header() {
             className={({ isActive, isPending }) =>
               [
                 isPending ? "text-gray-700" : "",
-                isActive ? "text-emerald-400" : "",
+                isActive ? "dark:text-emerald-400 text-emerald-600" : "",
               ].join(" ")
             }
             end
@@ -145,7 +146,7 @@ export function Header() {
             className={({ isActive, isPending }) =>
               [
                 isPending ? "text-gray-700" : "",
-                isActive ? "text-emerald-400" : "",
+                isActive ? "dark:text-emerald-400 text-emerald-600" : "",
               ].join(" ")
             }
             end

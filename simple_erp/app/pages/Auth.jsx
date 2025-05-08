@@ -1,6 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { Modal } from "../components/UI/Modal";
+import { Popup } from "../components/UI/Popup";
 
 const url = "https://serp.infinityfreeapp.com/user.php/";
 
@@ -18,6 +19,8 @@ export function Auth() {
   const [opened, setOpened] = useState(false);
   const [status, setStatus] = useState("error");
   const [can_send, setCanSend] = useState(false);
+  let [opened_popup, changeOpenedPopup] = useState(false);
+  let [popup_content, changePopupContent] = useState(null);
 
   async function exportData(email, password) {
     const response = await axios.post(
@@ -29,7 +32,7 @@ export function Auth() {
         command: "auth",
       },
       {
-        headers: { "Content-Type": "application/x-www-form-urlencoded", "Access-Control-Allow-Origin": "https://serp-chi.vercel.app" },
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
       }
     )
     .catch((error) => {
@@ -83,13 +86,24 @@ export function Auth() {
 
   return (
     <>
-      <Popup opened={opened} close={() => changeOpened(false)}>
+      <Modal opened={opened} close={() => setOpened(false)}>
+        {status == "error" ? (
+          <>
+            <h2>Ошибка авторизации</h2>
+          </>
+        ) : (
+          <>
+            <h2>Успешная авторизация</h2>
+          </>
+        )}
+      </Modal>
+      <Popup opened={opened_popup} close={() => changeOpenedPopup(false)}>
         <div className="flex break-words whitespace-pre w-full overflow-auto">
           {popup_content}
         </div>
       </Popup>
       <div className="flex justify-center flex-col items-center">
-        <div className="flex p-5 justify-center flex-col items-center gap-5 bg-gray-800 border-2 dark:border-white w-2xs">
+        <div className="flex p-5 justify-center flex-col items-center gap-5 dark:bg-gray-800 bg-gray-300 border-2 dark:border-white w-2xs">
           <h1>Авторизация</h1>
           <label htmlFor="email">Email:</label>
           <input
@@ -114,7 +128,7 @@ export function Auth() {
           <input
             type="button"
             value="Отправить данные"
-            className="bg-emerald-600 p-2 rounded-md hover:cursor-pointer"
+            className="dark:bg-emerald-600 bg-emerald-900 p-2 rounded-md hover:cursor-pointer text-white dark:text-black"
             onClick={async () => {
               checkFields();
               if (can_send) await exportData(email, password);

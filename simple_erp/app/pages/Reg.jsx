@@ -50,6 +50,7 @@ export function Reg() {
   const [org_name, setOrgName] = useState(" ");
   const [can_send, setCanSend] = useState(false);
   let [opened_popup, changeOpenedPopup] = useState(false);
+  let [popup_content, changePopupContent] = useState(null);
 
   function changeEmail(email) {
     if (email.trim() != "") {
@@ -101,7 +102,7 @@ export function Reg() {
 
   return (
     <div className="grid lg:grid-cols-2 sm:grid-cols-1 justify-center items-center gap-5 p-5">
-    <Popup opened={opened_popup} close={() => changeOpenedPopup(false)}>
+      <Popup opened={opened_popup} close={() => changeOpenedPopup(false)}>
         <div className="flex break-words whitespace-pre w-full overflow-auto">
           {popup_content}
         </div>
@@ -109,7 +110,7 @@ export function Reg() {
       <h1 className="break-words lg:col-start-1 lg:col-end-3 text-center">
         Регистрация
       </h1>
-      <div className="grid h-96 overflow-y-scroll overflow-x-hidden p-5 justify-center flex-col items-center lg:w-96 gap-5 bg-gray-800 border-2 dark:border-white w-2xs">
+      <div className="grid h-96 overflow-y-scroll overflow-x-hidden p-5 justify-center flex-col items-center lg:w-96 gap-5 dark:bg-gray-800 bg-gray-300 border-2 dark:border-white w-2xs">
         <div className="flex p-5 justify-center flex-col items-center gap-5">
           <div className="flex max-h-full p-5 justify-center flex-col items-center gap-5">
             <div className="flex justify-center flex-col items-center gap-5">
@@ -161,7 +162,7 @@ export function Reg() {
         </div>
       </div>
 
-      <div className="flex h-full overflow-y-scroll overflow-x-hidden p-5 justify-center flex-col items-center lg:w-96 gap-5 bg-gray-800 border-2 dark:border-white w-2xs">
+      <div className="flex h-full overflow-y-scroll overflow-x-hidden p-5 justify-center flex-col items-center lg:w-96 gap-5 dark:bg-gray-800 bg-gray-300 border-2 dark:border-white w-2xs">
         <div className="flex p-5 justify-center flex-col items-center gap-5">
           <label htmlFor="email">Email:</label>
           <input
@@ -193,7 +194,7 @@ export function Reg() {
       <div className="lg:col-start-1 lg:col-end-3 justify-center items-center flex">
         <input
           type="button"
-          className="bg-emerald-600 p-2 rounded-md hover:cursor-pointer"
+          className="dark:bg-emerald-600 bg-emerald-900 p-2 rounded-md hover:cursor-pointer text-white dark:text-black"
           value="Отправить данные"
           onClick={() => {
             checkFields();

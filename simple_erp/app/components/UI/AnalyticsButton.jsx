@@ -7,7 +7,7 @@ export default function AnalyticsButton({
 }) {
   return (
     <div
-      className="flex justify-center items-center h-full p-2 dark:bg-amber-950 hover:cursor-pointer rounded-md"
+      className="flex justify-center items-center h-full p-2 bg-amber-700 dark:bg-amber-950 hover:cursor-pointer rounded-md"
       onClick={() => {
         open();
         changeForm(form_id);

@@ -2,7 +2,7 @@ export default function LinkedSupplier({ supplier, setThing, changeForm, open })
   return (
     <>
       <div
-        className="grid h-full p-5 justify-center items-center text-center dark:bg-emerald-950 hover:cursor-pointer"
+        className="grid h-full p-5 justify-center items-center text-center bg-emerald-600 dark:bg-emerald-950 hover:cursor-pointer"
         onClick={() => {
           setThing(supplier);
           changeForm(2);

@@ -26,6 +26,7 @@ export function Analytics() {
 
   let [opened, changeOpened] = useState(false);
   let [opened_form, changeOpenedF] = useState(false);
+  let [opened_check, changeOpenedC] = useState(false);
   let [opened_accurate, changeOpenedA] = useState(false);
   let [opened_popup, changeOpenedPopup] = useState(false);
 
@@ -37,9 +38,9 @@ export function Analytics() {
 
   useEffect(() => {
     if(localStorage.getItem("user")){
-      axios
+    axios
       .get(
-        "https://localhost/serp/org.php?command=acception&id=" +
+        "https://serp.infinityfreeapp.com/serp/org.php?command=acception&id=" +
           localStorage.getItem("user")
       )
       .then((res) => {
@@ -97,7 +98,6 @@ export function Analytics() {
     else{
       redirect('auth');
     }
-    
   }, []);
 
   function renderForm() {
@@ -191,7 +191,7 @@ export function Analytics() {
       </Modal>
       <div className="w-11/12 grid sm:grid-cols-1 h-fit md:grid-cols-2 gap-5 items-center">
         <div
-          className="flex justify-center p-2 items-center h-fit dark:bg-amber-700 hover:cursor-pointer rounded-md"
+          className="flex justify-center p-2 items-center h-fit dark:bg-amber-700 bg-amber-400 hover:cursor-pointer rounded-md"
           onClick={() => {
             changeForm(5);
             changeOpenedF(true);
@@ -201,7 +201,7 @@ export function Analytics() {
           Сделать "снимок"
         </div>
         <div
-          className="flex justify-center p-2 items-center h-fit dark:bg-amber-700 hover:cursor-pointer rounded-md"
+          className="flex justify-center p-2 items-center h-fit dark:bg-amber-700 bg-amber-400 hover:cursor-pointer rounded-md"
           onClick={() => {
             changeOpened(true);
           }}

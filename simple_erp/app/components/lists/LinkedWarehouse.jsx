@@ -12,7 +12,7 @@ export default function LinkedWarehouse({
           changeForm(1);
           open();
         }}
-        className="grid h-full p-5 justify-center items-center text-center dark:bg-emerald-950 hover:cursor-pointer"
+        className="grid h-full p-5 justify-center items-center text-center bg-emerald-600 dark:bg-emerald-950 hover:cursor-pointer"
       >
         <div>Наименование: {warehouse["name"]}</div>
         <div>
