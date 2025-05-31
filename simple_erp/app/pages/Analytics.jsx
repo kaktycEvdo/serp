@@ -18,15 +18,14 @@ import AnalyticsButton from "../components/UI/AnalyticsButton.jsx";
 import { Popup } from "../components/UI/Popup.jsx";
 import { redirect } from "react-router";
 
-const url_get = "https://serp.infinityfreeapp.com/get.php?";
-const url_rq = "https://serp.infinityfreeapp.com/general_requests.php";
+const url_get = "https://xn--e1aucc.site/get.php?";
+const url_rq = "https://xn--e1aucc.site/general_requests.php";
 
 export function Analytics() {
   let [data, setData] = useState(null);
 
   let [opened, changeOpened] = useState(false);
   let [opened_form, changeOpenedF] = useState(false);
-  let [opened_check, changeOpenedC] = useState(false);
   let [opened_accurate, changeOpenedA] = useState(false);
   let [opened_popup, changeOpenedPopup] = useState(false);
 
@@ -40,7 +39,7 @@ export function Analytics() {
     if(localStorage.getItem("user")){
     axios
       .get(
-        "https://serp.infinityfreeapp.com/serp/org.php?command=acception&id=" +
+        "https://xn--e1aucc.site/org.php?command=acception&id=" +
           localStorage.getItem("user")
       )
       .then((res) => {

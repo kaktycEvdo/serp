@@ -2,7 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import { Popup } from "../components/UI/Popup";
 
-const url = "https://serp.infinityfreeapp.com/user.php";
+const url = "https://xn--e1aucc.site/user.php";
 
 async function exportData(email, password, create_new_org, org_name) {
   const response = await axios.post(

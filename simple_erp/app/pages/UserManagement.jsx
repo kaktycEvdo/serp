@@ -4,7 +4,7 @@ import { Popup } from "../components/UI/Popup.jsx";
 import axios from "axios";
 import { redirect } from "react-router";
 
-const url_get = "https://serp.infinityfreeapp.com/get.php?command=getAll&item=users";
+const url_get = "https://xn--e1aucc.site/get.php?command=getAll&item=users";
 // const url_user = "http://serp.infinityfreeapp.com/user.php/";
 
 export function UserManagement() {
@@ -18,7 +18,7 @@ export function UserManagement() {
     if(localStorage.getItem('user')){
     axios
       .get(
-        "https://serp.infinityfreeapp.com/org.php?command=acception&id=" +
+        "https://xn--e1aucc.site/org.php?command=acception&id=" +
           localStorage.getItem("user")
       )
       .then((res) => {

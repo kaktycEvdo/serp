@@ -3,7 +3,7 @@ import axios from "axios";
 import { Modal } from "../components/UI/Modal";
 import { Popup } from "../components/UI/Popup";
 
-const url = "https://serp.infinityfreeapp.com/user.php/";
+const url = "https://xn--e1aucc.site/user.php/";
 
 function validateEmail(email) {
   if (!email.match(/[a-z0-9._-]+@[a-z]{3,}\.[a-z]{2,3}/)) {
