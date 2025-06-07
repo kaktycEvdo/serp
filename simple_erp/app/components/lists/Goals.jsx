@@ -1,4 +1,5 @@
 import AnalyticsButton from "../UI/AnalyticsButton.jsx";
+import Item from "../UI/Item.jsx";
 
 function showType(type) {
   switch (type) {
@@ -19,7 +20,6 @@ export default function Goals({
   changeForm,
   changeOpenedF,
   open,
-  resources,
 }) {
   return (
     <>
@@ -30,14 +30,13 @@ export default function Goals({
         goals.length > 0 ? (
           goals.map((goal, index) => {
             return (
-              <div
+              <Item
                 key={"g" + index}
                 onClick={() => {
                   setThing(goal);
                   changeForm(3);
                   open();
                 }}
-                className="grid h-full p-5 justify-center items-center text-center bg-emerald-600 dark:bg-emerald-950 hover:cursor-pointer rounded-md"
               >
                 <div>Наименование: {goal["name"]}</div>
                 <div>
@@ -54,19 +53,15 @@ export default function Goals({
                   Требует:{" "}
                   {Object.keys(JSON.parse(goal["listing"])).map((key, index) => {
                     let listing = JSON.parse(goal["listing"]);
-                    let resource = null;
-                    resources.forEach((res) => {
-                      if (res["id"] == key) resource = res;
-                    });
                     return (
                       <div key={"rg_"+index}>
-                        {resource ? resource["name"] : "null"}:{" "}
-                        {listing[key] + showType(resource["type"])}
+                        {key}:{" "}
+                        {listing[key]}
                       </div>
                     );
                   })}
                 </div>
-              </div>
+              </Item>
             );
           })
         ) : null

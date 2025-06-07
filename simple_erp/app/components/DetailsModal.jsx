@@ -1,49 +1,18 @@
 import axios from "axios";
 
-function returnType(type) {
+function returnType(type, full = false) {
   switch (type) {
-    case 0: {
-      return "шт.";
-    }
-    case 1: {
-      return "л.";
-    }
-    case 2: {
-      return "кг.";
-    }
-    case 3: {
-      return "уп.";
-    }
+    case 0:
+      return full ? "Штучный" : "шт.";
+    case 1:
+      return full ? "Жидкий" : "л.";
+    case 2:
+      return full ? "Сыпчатый" : "кг.";
+    case 3:
+      return full ? "Упаковка" : "уп.";
   }
 }
-function returnTypeFull(type) {
-  switch (type) {
-    case 0: {
-      return "Штучный (шт.)";
-    }
-    case 1: {
-      return "Жидкостный (л.)";
-    }
-    case 2: {
-      return "Сыпчатый (кг.)";
-    }
-    case 3: {
-      return "Упаковка (уп.)";
-    }
-  }
-}
-function getObjectById(array, id) {
-  let res = null;
-  let ar = array;
-  ar.forEach((element) => {
-    if (element["id"] == id) {
-      res = element;
-    }
-  });
-  return res;
-}
-
-export default function DetailsModal({ thing, url, editOpen, close, data }) {
+export default function DetailsModal({ thing, url, editOpen, close }) {
   return (
     <div className="flex flex-col gap-5">
       <h2 className="text-center">Подробно</h2>
@@ -60,7 +29,7 @@ export default function DetailsModal({ thing, url, editOpen, close, data }) {
                   case "type":
                     return (
                       <div key={"d" + index}>
-                        Тип: {returnTypeFull(thing["type"])}
+                        Тип: {returnType(thing["type"], true)}
                       </div>
                     );
                   case "safestock":
@@ -82,24 +51,19 @@ export default function DetailsModal({ thing, url, editOpen, close, data }) {
                     return (
                       <div key={"d" + index}>
                         {thing["field_titles"][key]}: {thing[key]}
-                        {returnType(thing["resource"]["type"])}
+                        {returnType(thing["type"])}
                       </div>
                     );
                   case "listing":
                     let listing = JSON.parse(thing[key]);
                     return (
-                      <div key={"d" + index} className="grid grid-flow-col">
-                        <h3>Требуется: </h3>
-                        <div>
+                      <div key={"d" + index} className="grid grid-flow-row m-2">
+                        <h3>Требуется: </h3>{" "}
+                        <div className="flex flex-col">
                           {Object.keys(listing).map((item_id, i) => {
-                            let resource = getObjectById(
-                              data["resources"],
-                              item_id
-                            );
                             return (
                               <div key={"dl" + i}>
-                                {resource["name"]}: {listing[item_id]}
-                                {returnType(resource["type"])}
+                                {item_id}: {listing[item_id]}
                               </div>
                             );
                           })}

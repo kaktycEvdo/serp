@@ -1,9 +1,11 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { NavLink } from "react-router";
 import imgUrl from './../../assets/icon.svg';
+import { UserContext } from "../../UserContext";
 
 export function Header() {
   let [menuShow, menuShowChange] = useState(false);
+  const user = useContext(UserContext);
 
   return (
     <header className="flex flex-row items-center h-20 p-5 border-b-4 border-b-emerald-400">
@@ -20,7 +22,7 @@ export function Header() {
       <nav
         className={
           menuShow
-            ? "flex flex-col bg-white dark:bg-gray-950 right-0 absolute w-60 top-20 gap-5 items-end text-right justify-start p-5 border-l-4 border-l-emerald-600"
+            ? "flex lg:hidden flex-col bg-white dark:bg-gray-950 right-0 absolute w-60 top-20 gap-5 items-end text-right justify-start p-5 border-l-4 border-l-emerald-600"
             : "hidden"
         }
         style={{ height: "calc(100vh - (var(--spacing) * 20))" }}
@@ -61,7 +63,7 @@ export function Header() {
         >
           Управление работниками
         </NavLink>
-        <NavLink
+        { user ? null : <><NavLink
           to="auth"
           className={({ isActive, isPending }) =>
             [
@@ -84,12 +86,25 @@ export function Header() {
           end
         >
           Регистрация
-        </NavLink>
+        </NavLink></> }
+        
+        <NavLink
+            to="docs"
+            className={({ isActive, isPending }) =>
+              [
+                isPending ? "text-gray-700" : "",
+                isActive ? "dark:text-emerald-400 text-emerald-600" : "",
+              ].join(" ")
+            }
+            end
+          >
+            Документация
+          </NavLink>
       </nav>
       <nav className="h-20 hidden p-5 justify-between items-center gap-5 lg:flex lg:flex-row w-full">
         <div className="w-full flex flex-row gap-5 justify-start items-center">
           <NavLink to="/" end>
-            <img src="app/assets/icon.svg" alt="logo" className="h-15 w-20 dark:invert" />
+            <img src={imgUrl} alt="logo" className="h-15 w-20 dark:invert" />
           </NavLink>
           <NavLink
             to="/"

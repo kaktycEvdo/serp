@@ -1,4 +1,5 @@
 import AnalyticsButton from "../UI/AnalyticsButton";
+import Item from "../UI/Item";
 
 export default function Resources({
   resources,
@@ -29,14 +30,13 @@ export default function Resources({
         resources.length > 0 ? (
           resources.map((resource, index) => {
             return (
-              <div
+              <Item
                 key={index}
                 onClick={() => {
                   setThing(resource);
                   changeForm(0);
                   open();
                 }}
-                className="grid h-full w-full p-5 justify-center items-center text-center bg-emerald-600 dark:bg-emerald-950 hover:cursor-pointer rounded-md"
               >
                 <div>Наименование: {resource["name"]}</div>
                 <div>
@@ -52,7 +52,7 @@ export default function Resources({
                     ? resource["amount"] + showType(resource["type"])
                     : "Неизвестно"}
                 </div>
-              </div>
+              </Item>
             );
           })
         ) : null

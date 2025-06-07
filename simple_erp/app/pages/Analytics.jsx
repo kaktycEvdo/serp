@@ -17,9 +17,10 @@ import Suppliers from "../components/lists/Suppliers.jsx";
 import AnalyticsButton from "../components/UI/AnalyticsButton.jsx";
 import { Popup } from "../components/UI/Popup.jsx";
 import { redirect } from "react-router";
+import { host } from "../host.js";
 
-const url_get = "https://xn--e1aucc.site/get.php?";
-const url_rq = "https://xn--e1aucc.site/general_requests.php";
+const url_get = host+"get.php?";
+const url_rq = host+"general_requests.php";
 
 export function Analytics() {
   let [data, setData] = useState(null);
@@ -30,17 +31,15 @@ export function Analytics() {
   let [opened_popup, changeOpenedPopup] = useState(false);
 
   let [popup_content, changePopupContent] = useState(null);
-  // 0 - resource, 1 - warehouse, 2 - supplier, 3 - goal, 4 - resourcelink, 5 - snapshot
+  // 0 - resource, 1 - warehouse, 2 - supplier, 3 - goal
   let [form, changeForm] = useState(0);
 
   let [thing, setThing] = useState(null);
 
   useEffect(() => {
-    if(localStorage.getItem("user")){
     axios
       .get(
-        "https://xn--e1aucc.site/org.php?command=acception&id=" +
-          localStorage.getItem("user")
+        host+"org.php?command=acception&id=" + localStorage.getItem("user")
       )
       .then((res) => {
         if (res.data != 1) {
@@ -58,16 +57,22 @@ export function Analytics() {
       )
       .then((res) => {
         let result = res;
+        if(result.data == 403){
+          redirect("auth");
+          location = 'auth';
+        }
         if (result.headers.getContentType().split("; ")[0] === "text/html") {
           changePopupContent(
             "Ошибка на стороне сервера. Вывод: " + result.data
           );
           changeOpenedPopup(true);
         }
-        console.log(result.data);
         setData(result.data);
       })
       .catch((error) => {
+        if(error.message == 403){
+          redirect("auth");
+        }
         changePopupContent(
           "Ошибка при подключении к серверу. Вывод: " + error.message
         );
@@ -83,6 +88,9 @@ export function Analytics() {
               { mode: "cors" }
             )
             .catch((error) => {
+              if(error.message == 403){
+                redirect("auth");
+              }
               changePopupContent(
                 "Ошибка при подключении к серверу. Вывод: " + error.message
               );
@@ -93,10 +101,6 @@ export function Analytics() {
             });
         }, interval)
       );
-    }
-    else{
-      redirect('auth');
-    }
   }, []);
 
   function renderForm() {
@@ -190,17 +194,17 @@ export function Analytics() {
       </Modal>
       <div className="w-11/12 grid sm:grid-cols-1 h-fit md:grid-cols-2 gap-5 items-center">
         <div
-          className="flex justify-center p-2 items-center h-fit dark:bg-amber-700 bg-amber-400 hover:cursor-pointer rounded-md"
+          className="flex justify-center p-2 items-center h-fit bg-amber-700 dark:bg-amber-900 hover:cursor-pointer rounded-md hover:bg-amber-950 border-2 border-amber-950"
           onClick={() => {
             changeForm(5);
             changeOpenedF(true);
             setThing(null);
           }}
         >
-          Сделать "снимок"
+          Сделать учёт
         </div>
         <div
-          className="flex justify-center p-2 items-center h-fit dark:bg-amber-700 bg-amber-400 hover:cursor-pointer rounded-md"
+          className="flex justify-center p-2 items-center h-fit bg-amber-700 dark:bg-amber-900 hover:cursor-pointer rounded-md hover:bg-amber-950 border-2 border-amber-950"
           onClick={() => {
             changeOpened(true);
           }}

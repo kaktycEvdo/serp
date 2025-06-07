@@ -1,5 +1,4 @@
 import axios from "axios";
-import AnalyticsButton from "./UI/AnalyticsButton";
 
 export default function AppendPutResourceForm({
   warehouses,

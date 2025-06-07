@@ -38,7 +38,7 @@ export default function CheckForm({ close, data, url }) {
     };
     axios.post(url, body, options).then((res) => console.log(res.data));
   }
-  let listing = [];
+  let listing = {};
   return (
     <div className="max-h-11/12">
       <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-center">
@@ -50,7 +50,6 @@ export default function CheckForm({ close, data, url }) {
         {data["resource_links"] ? (
           Object.keys(data["resource_links"]["supplied"]).map((supplier_id) => {
             let supplier = getObjectById(data["companies"], supplier_id);
-            listing[supplier_id] = [];
             return (
               <div key={"cs_" + supplier_id}>
                 <h3>{supplier.name} поставили:</h3>
@@ -63,7 +62,6 @@ export default function CheckForm({ close, data, url }) {
                         data["warehouses"],
                         warehouse_id
                       );
-                      listing[supplier_id][warehouse_id] = [];
                       return (
                         <div
                           className="flex flex-col gap-5 m-2"
@@ -74,7 +72,11 @@ export default function CheckForm({ close, data, url }) {
                           ].map((resource) => {
                             let [amount, setAmount] = useState(0);
                             let [price, setPrice] = useState(0);
-                            listing[supplier_id][warehouse_id][resource["id"]] = { amount: amount, price: price };
+                            if(!listing[resource['resource_name']]) listing[resource['resource_name']] = { amount: amount/1, price: price/1, supplier: supplier_id, warehouse: warehouse_id };
+                            else {
+                              let og_listing = listing[resource['resource_name']];
+                              listing[resource['resource_name']] = { amount: og_listing.amount/1 + amount/1, price: (og_listing.price/1 + price/1)/2, supplier: supplier_id, warehouse: warehouse_id };
+                            }
                             return (
                               <div className="grid grid-cols-2">
                                 <label htmlFor={resource["id"]}>
@@ -113,9 +115,8 @@ export default function CheckForm({ close, data, url }) {
                                       {data["goals"].map((goal, index) => {
                                         let [checked, changeChecked] =
                                           useState(false);
-                                        const  [splitAmount, setSplitAmount] =
-                                          useState(amount);
-                                        listing[supplier_id][warehouse_id][resource["id"]]['goal'+goal['id']] = checked ? {id: goal['id'], amount: splitAmount} : null;
+                                        const  [splitAmount, setSplitAmount] = useState(amount);
+                                        listing[resource['resource_name']]['goal'+goal['id']] = checked ? {id: goal['id'], amount: splitAmount} : null;
                                         return (
                                           <div key={"gil" + goal["id"]}>
                                             <label htmlFor={"goal" + index + warehouse_id + supplier_id}>
@@ -173,7 +174,7 @@ export default function CheckForm({ close, data, url }) {
           type="button"
           className="inline-flex w-full justify-center rounded-md bg-emerald-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-emerald-800 sm:ml-3 sm:w-auto"
           onClick={() => {
-            // close();
+            close();
             sendRequest(listing);
           }}
         >

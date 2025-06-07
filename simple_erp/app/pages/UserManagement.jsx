@@ -2,65 +2,57 @@ import { useEffect, useState } from "react";
 import { Modal } from "../components/UI/Modal.jsx";
 import { Popup } from "../components/UI/Popup.jsx";
 import axios from "axios";
-import { redirect } from "react-router";
+import Item from "../components/UI/Item.jsx";
+import UserDetailsModal from "../components/UserDetailsModal.jsx";
+import { host } from "../host.js";
 
-const url_get = "https://xn--e1aucc.site/get.php?command=getAll&item=users";
-// const url_user = "http://serp.infinityfreeapp.com/user.php/";
+const url_get = host+"get.php?command=getAll&item=users";
+const url_acc = host+"org.php?command=role&id=";
+// const url_user = host+"serp/user.php/";
 
 export function UserManagement() {
-  let [data, setData] = useState(null);
-  let [opened_popup, changeOpenedPopup] = useState(false);
-  let [popup_content, changePopupContent] = useState(null);
+  const [data, setData] = useState(null);
+  const [opened_details, changeOpenedDetails] = useState(false);
+  const [opened_popup, changeOpenedPopup] = useState(false);
+  const [popup_content, changePopupContent] = useState(null);
+  const [user, changeUser] = useState(null);
 
   // let [opened_user_form, changeOpenedUF] = useState(false);
 
   useEffect(() => {
-    if(localStorage.getItem('user')){
-    axios
-      .get(
-        "https://xn--e1aucc.site/org.php?command=acception&id=" +
-          localStorage.getItem("user")
-      )
-      .then((res) => {
-        if (res.data != 1) {
-          redirect("/auth");
-        }
-      });
-    // live reaction to changing data requires intervals of checking. 2 - seconds, 1000 - milliseconds.
-    let interval = 2 * 1000;
-    axios
-      .get(
-        url_get + "&user_id=" +
-          localStorage.getItem("user"),
-        { mode: "cors" }
-      )
-      .then((res) => {
-        let result = res;
-        if (result.headers.getContentType().split("; ")[0] === "text/html") {
-          changePopupContent(
-            "Ошибка на стороне сервера. Вывод: " + result.data
-          );
-          changeOpenedPopup(true);
-        }
-        setData(result.data);
-      })
-      .then(
-        setInterval(() => {
-          axios
-            .get(
-              url_get + "&user_id=" +
-                localStorage.getItem("user"),
-              { mode: "cors" }
-            )
-            .then((res) => {
-              setData(res.data);
-            });
-        }, interval)
-      );
+    if (localStorage.getItem("user")) {
+      const user = localStorage.getItem('user');
+      axios
+        .get(
+          url_acc + user
+        )
+        .then((res) => {
+          if (res.data != 1) {
+            redirect("/dashboard");
+          }
+        });
+      // live reaction to changing data requires intervals of checking. 2 - seconds, 1000 - milliseconds.
+      let interval = 2 * 1000;
+      axios
+        .get(url_get + "&user_id=" + user, {
+          mode: "cors",
+        })
+        .then((res) => {
+          let result = res;
+          setData(result.data);
+        })
+        .then(
+          setInterval(() => {
+            axios
+              .get(url_get + "&user_id=" + user, {
+                mode: "cors",
+              })
+              .then((res) => {
+                setData(res.data);
+              });
+          }, interval)
+        );
     }
-      else{
-        redirect('auth');
-      }
   }, []);
 
   return (
@@ -70,6 +62,11 @@ export function UserManagement() {
           {popup_content}
         </div>
       </Popup>
+      <Modal opened={opened_details} close={() => changeOpenedDetails(false)}>
+        <div className="flex break-words whitespace-pre w-full overflow-auto">
+          <UserDetailsModal user={user} />
+        </div>
+      </Modal>
       <div className="flex max-h-full overflow-y-scroll w-full justify-center items-start">
         <div className="p-5 w-full grid grid-flow-row gap-5">
           <div className="h-fit grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
@@ -80,12 +77,15 @@ export function UserManagement() {
               data["not_accepted"].length > 0 ? (
                 data["not_accepted"].map((user, index) => {
                   return (
-                    <div
+                    <Item
                       key={"n" + index}
-                      className="grid h-full p-5 justify-center items-center text-center bg-emerald-600 dark:bg-emerald-950 hover:cursor-pointer rounded-md"
+                      onClick={() => {
+                        changeOpenedDetails(true);
+                        changeUser(user);
+                      }}
                     >
                       <div>Почта: {user["email"]}</div>
-                    </div>
+                    </Item>
                   );
                 })
               ) : (
@@ -103,12 +103,15 @@ export function UserManagement() {
               data["accepted"].length > 0 ? (
                 data["accepted"].map((user, index) => {
                   return (
-                    <div
+                    <Item
                       key={"n" + index}
-                      className="grid h-full p-5 justify-center items-center text-center bg-emerald-600 dark:bg-emerald-950 hover:cursor-pointer rounded-md"
+                      onClick={() => {
+                        changeOpenedDetails(true);
+                        changeUser(user);
+                      }}
                     >
                       <div>Почта: {user["email"]}</div>
-                    </div>
+                    </Item>
                   );
                 })
               ) : (

@@ -1,3 +1,5 @@
+import Item from "../UI/Item";
+
 export default function Suppliers({ suppliers, setThing, open, changeForm, changeOpenedF }) {
   return (
     <>
@@ -8,9 +10,8 @@ export default function Suppliers({ suppliers, setThing, open, changeForm, chang
         suppliers.length > 0 ? (
           suppliers.map((supplier, index) => {
             return (
-              <div
+              <Item
                 key={"g" + index}
-                className="grid h-full p-5 justify-center items-center text-center bg-emerald-600 dark:bg-emerald-950 hover:cursor-pointer rounded-md"
                 onClick={() => {
                   setThing(supplier);
                   changeForm(2);
@@ -25,7 +26,7 @@ export default function Suppliers({ suppliers, setThing, open, changeForm, chang
                     ? supplier["description"]
                     : "У данного поставщика нет описания."}
                 </div>
-              </div>
+              </Item>
             );
           })
         ) : (

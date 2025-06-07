@@ -1,4 +1,5 @@
 import AnalyticsButton from "../UI/AnalyticsButton";
+import Item from "../UI/Item";
 
 export default function Warehouses({ warehouses, setThing, open, changeForm, changeOpenedF }) {
   return (
@@ -10,7 +11,7 @@ export default function Warehouses({ warehouses, setThing, open, changeForm, cha
         warehouses.length > 0 ? (
           warehouses.map((warehouse, index) => {
             return (
-              <div
+              <Item
                 key={"g" + index}
                 onClick={() => {
                   setThing(warehouse);
@@ -25,7 +26,7 @@ export default function Warehouses({ warehouses, setThing, open, changeForm, cha
                     ? warehouse["description"]
                     : "У данного склада нет описания."}
                 </div>
-              </div>
+              </Item>
             );
           })
         ) : (

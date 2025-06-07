@@ -1,3 +1,5 @@
+import Cell from "../UI/Cell";
+
 export default function LinkedResource({ resource, setThing, open, changeForm }) {
   function getDaysUntilSafestock(resource) {
     let days = 0;
@@ -23,19 +25,17 @@ export default function LinkedResource({ resource, setThing, open, changeForm })
   }
 
   return (
-    <>
-      <div
-        onClick={() => {
-          setThing(resource);
-          changeForm(4);
-          open();
-        }}
-        className={"grid h-full w-full p-5 justify-center items-center text-center bg-emerald-600 dark:bg-emerald-950 hover:cursor-pointer link_resource"+resource['id']}
-      >
-        <div>Наименование: {resource['resource']["name"]}</div>
-        <div>Количество: {resource["amount"]+showType(resource['resource']['type'])}</div>
-        <div>Цена: {resource["price"]}руб.</div>
-      </div>
-    </>
+    <Cell
+      onClick={() => {
+        setThing(resource);
+        changeForm(4);
+        open();
+      }}
+      additional_classes={"link_resource"+resource['id']}
+    >
+      <div>Наименование: {resource['resource']["name"]}</div>
+      <div>Количество: {resource["amount"]+showType(resource['resource']['type'])}</div>
+      <div>Цена: {resource["price"]}руб.</div>
+    </Cell>
   );
 }

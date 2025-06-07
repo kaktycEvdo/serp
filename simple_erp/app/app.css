@@ -13,3 +13,11 @@ body {
     color-scheme: dark;
   }
 }
+
+.logo{
+  @apply fill-black dark:fill-white;
+
+  @media (prefers-color-scheme: dark) {
+    fill: white;
+  }
+}

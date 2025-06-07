@@ -1,3 +1,5 @@
+import { host } from "../host";
+
 export default function ReportModal({ close }) {
   return (
     <>
@@ -11,21 +13,15 @@ export default function ReportModal({ close }) {
           </p>
         </div>
         <embed
-          src={"http://serp.infinityfreeapp.com/pdf_show.php?user_id="+localStorage.getItem('user')}
+          src={host+"pdf_show.php?user_id="+localStorage.getItem('user')}
           height={600}
           width={450}
         />
       </div>
       <div className="px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
-        <button
-          type="button"
-          className="inline-flex w-full justify-center rounded-md bg-emerald-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-emerald-800 sm:ml-3 sm:w-auto"
-          onClick={() => {
+        <a className="inline-flex w-full justify-center rounded-md bg-emerald-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-emerald-800 sm:ml-3 sm:w-auto" href={"http://localhost/serp/pdf_show.php?user_id="+localStorage.getItem('user')} download="doc.pdf" onClick={() => {
             close();
-          }}
-        >
-          Загрузить
-        </button>
+          }}>Загрузить</a>
       </div>
     </>
   );

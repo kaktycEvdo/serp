@@ -37,8 +37,9 @@ export default function CreateGoalForm({
           let checked = document.querySelectorAll("input:checked");
           let listing = {};
           checked.forEach((element) => {
+            let resource_name = element.attributes.rs.nodeValue;
             let amount = document.querySelector("input." + element.id).value;
-            if (amount > 0) listing[element.id.split("_")[1]] = amount;
+            if (amount > 0) listing[resource_name] = amount;
           });
           let body = {
             mode: "cors",
@@ -77,7 +78,7 @@ export default function CreateGoalForm({
           id="gf_description"
           defaultValue={thing ? thing["description"] : null}
         ></textarea>
-        <label htmlFor="gf_name">Дедлайн (пусто для вечной цели)</label>
+        <label htmlFor="gf_name">Дедлайн</label>
         <input
           type="date"
           className="gf bg-white text-black border-2 border-black"
@@ -88,11 +89,11 @@ export default function CreateGoalForm({
         {resources ? (
           <div className="grid w-full lg:grid-cols-2 md:grid-cols-1 justify-between col-start-1 col-end-3">
             {resources.map((resource, index) => {
-              let [checked, changeChecked] = useState(thing ? thing_listing : false);
+              let [checked, changeChecked] = useState(thing ? thing_listing[resource['name']] : false);
               return (
                 <>
                   <div key={"r" + index} className="col-start-1 col-end-2">
-                    <label htmlFor={"r_" + resource["id"]}>
+                    <label htmlFor={"r_"+resource['id']}>
                       {resource["name"] +
                         " (" +
                         showType(resource["type"]) +
@@ -102,7 +103,8 @@ export default function CreateGoalForm({
                       type="checkbox"
                       name="resources"
                       checked={checked}
-                      id={"r_" + resource["id"]}
+                      rs={resource['name']}
+                      id={"r_"+resource['id']}
                       onChange={(e) => {
                         changeChecked(e.target.checked);
                       }}
@@ -111,12 +113,12 @@ export default function CreateGoalForm({
                   <input
                     type="number"
                     defaultValue={
-                      thing_listing ? thing_listing[resource["id"]] : 0
+                      thing_listing ? thing_listing[resource["name"]] : 0
                     }
                     className={
                       checked
-                        ? "gf bg-white w-full text-black border-2 border-black " +
-                          ("r_" + resource["id"])
+                        ? "gf bg-white w-full text-black border-2 border-black "
+                        + "r_"+resource['id']
                         : "hidden"
                     }
                   />

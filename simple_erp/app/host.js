@@ -1,0 +1,1 @@
+export const host = "https://xn--e1aucc.site/";
