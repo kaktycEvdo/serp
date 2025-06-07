@@ -20,6 +20,7 @@ export default function Goals({
   changeForm,
   changeOpenedF,
   open,
+  resources
 }) {
   return (
     <>
