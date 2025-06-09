@@ -19,7 +19,7 @@ export default function ReportModal({ close }) {
         />
       </div>
       <div className="px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
-        <a className="inline-flex w-full justify-center rounded-md bg-emerald-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-emerald-800 sm:ml-3 sm:w-auto" href={host+"pdf_show.php?user_id="+localStorage.getItem('user')} download="doc.pdf" onClick={() => {
+        <a className="inline-flex w-full justify-center rounded-md bg-emerald-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-emerald-800 sm:ml-3 sm:w-auto" href={"http://localhost/serp/pdf_show.php?user_id="+localStorage.getItem('user')} download="doc.pdf" onClick={() => {
             close();
           }}>Загрузить</a>
       </div>

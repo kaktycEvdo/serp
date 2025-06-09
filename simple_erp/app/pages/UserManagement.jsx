@@ -8,16 +8,23 @@ import { host } from "../host.js";
 
 const url_get = host+"get.php?command=getAll&item=users";
 const url_acc = host+"org.php?command=role&id=";
-// const url_user = host+"serp/user.php/";
+const url_user = host+"user.php";
 
 export function UserManagement() {
   const [data, setData] = useState(null);
   const [opened_details, changeOpenedDetails] = useState(false);
   const [opened_popup, changeOpenedPopup] = useState(false);
+  const [status, setStatus] = useState(1);
   const [popup_content, changePopupContent] = useState(null);
   const [user, changeUser] = useState(null);
 
   // let [opened_user_form, changeOpenedUF] = useState(false);
+
+  function makePopup(status, text = popup_content){
+    changePopupContent(text);
+    setStatus(status);
+    changeOpenedPopup(true);
+  }
 
   useEffect(() => {
     if (localStorage.getItem("user")) {
@@ -57,14 +64,14 @@ export function UserManagement() {
 
   return (
     <div className="flex w-screen h-full justify-center flex-col items-center">
-      <Popup opened={opened_popup} close={() => changeOpenedPopup(false)}>
+      <Popup opened={opened_popup} close={() => changeOpenedPopup(false)} status={status}>
         <div className="flex break-words whitespace-pre w-full overflow-auto">
           {popup_content}
         </div>
       </Popup>
       <Modal opened={opened_details} close={() => changeOpenedDetails(false)}>
         <div className="flex break-words whitespace-pre w-full overflow-auto">
-          <UserDetailsModal user={user} />
+          <UserDetailsModal user={user} url={url_user} makePopup={makePopup} />
         </div>
       </Modal>
       <div className="flex max-h-full overflow-y-scroll w-full justify-center items-start">

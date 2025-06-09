@@ -28,13 +28,19 @@ export function Analytics() {
   let [opened, changeOpened] = useState(false);
   let [opened_form, changeOpenedF] = useState(false);
   let [opened_accurate, changeOpenedA] = useState(false);
-  let [opened_popup, changeOpenedPopup] = useState(false);
-
-  let [popup_content, changePopupContent] = useState(null);
+  const [opened_popup, changeOpenedPopup] = useState(false);
+  const [status, setStatus] = useState(1);
+  const [popup_content, changePopupContent] = useState(null);
   // 0 - resource, 1 - warehouse, 2 - supplier, 3 - goal
   let [form, changeForm] = useState(0);
 
   let [thing, setThing] = useState(null);
+
+  function makePopup(status, text = popup_content){
+    changePopupContent(text);
+    setStatus(status);
+    changeOpenedPopup(true);
+  }
 
   useEffect(() => {
     axios
@@ -172,7 +178,7 @@ export function Analytics() {
 
   return (
     <div className="flex w-screen h-full justify-center flex-col items-center">
-      <Popup opened={opened_popup} close={() => changeOpenedPopup(false)}>
+      <Popup opened={opened_popup} close={() => changeOpenedPopup(false)} status={status}>
         <div className="flex break-words whitespace-pre w-full overflow-auto">
           {popup_content}
         </div>
