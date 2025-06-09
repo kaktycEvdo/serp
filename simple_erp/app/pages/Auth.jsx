@@ -16,89 +16,84 @@ function validateEmail(email) {
 }
 
 export function Auth() {
-  const [email, setEmail] = useState(" ");
-  const [password, setPassword] = useState(" ");
-  const [opened, setOpened] = useState(false);
-  const [status, setStatus] = useState("error");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("Заполните поля");
+  const [status, setStatus] = useState(1);
   const [can_send, setCanSend] = useState(false);
-  let [opened_popup, changeOpenedPopup] = useState(false);
-  let [popup_content, changePopupContent] = useState(null);
+  const [opened_popup, changeOpenedPopup] = useState(false);
+  const [popup_content, changePopupContent] = useState(null);
   const user = useContext(UserContext);
 
+  function makePopup(status, text = popup_content){
+    changePopupContent(text);
+    setStatus(status);
+    changeOpenedPopup(true);
+  }
+
   async function exportData(email, password) {
-    const response = await axios.post(
-      url,
-      {
-        mode: "cors",
-        email: email,
-        password: password,
-        command: "auth",
-      },
-      {
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    if(can_send){
+      const response = await axios.post(
+        url,
+        {
+          mode: "cors",
+          email: email,
+          password: password,
+          command: "auth",
+        },
+        {
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        }
+      );
+      let text = response.data;
+      if (text != "not found") {
+        makePopup(0, "Успешная авторизация");
+        localStorage.setItem("user", text);
       }
-    );
-    let text = response.data;
-    if (text != "not found") {
-      setOpened(true);
-      setStatus("success");
-      localStorage.setItem("user", text);
+      else{
+        makePopup(1, "Ошибка авторизации: неверные данные");
+        localStorage.removeItem("user");
+      }
     }
     else{
-      setOpened(true);
-      setStatus("error");
-      localStorage.removeItem("user");
+      makePopup(1, error);
     }
   }
 
   function changeEmail(email) {
-    if (email.trim() != "") {
-      let validationRes = validateEmail(email);
-      if (validationRes[0] === 1) {
-        document.getElementById("error-box").innerHTML = validationRes[1];
-      } else {
-        setEmail(email);
-        document.getElementById("error-box").innerHTML = "";
-        checkFields();
-      }
-    }
+    setEmail(email);
+    checkFields(email, null);
   }
   function changePassword(password) {
-    if (password.trim() != "") {
-      if (password.length < 6) {
-        document.getElementById("error-box").innerHTML =
-          "Пароль меньше 6 символов";
-      } else {
-        setPassword(password);
-        document.getElementById("error-box").innerHTML = "";
-        checkFields();
+    setPassword(password);
+    checkFields(null, password);
+  }
+  function checkFields(p_email = null, p_password = null) {
+    setCanSend(false);
+    if(!p_email) p_email = email;
+    if(!p_password) p_password = password;
+
+    if (p_password.trim() != "" && p_email.trim() != "") {
+      let validationRes = validateEmail(p_email);
+      if (validationRes[0] === 1) {
+        setError(validationRes[1]);
+      }
+      else if (p_password.length < 6) {
+        setError("Пароль меньше 6 символов");
+      }
+      else{
+        setError(null);
+        setCanSend(true);
       }
     }
-  }
-  function checkFields() {
-    if (
-      email &&
-      password &&
-      document.getElementById("error-box").innerHTML == ""
-    ) {
-      setCanSend(true);
+    else{
+      setError("Заполните поля");
     }
   }
 
   return (
     <>
-      <Modal opened={opened} close={() => setOpened(false)}>
-        {status == "error" ? (
-          <>
-            <h2>Ошибка авторизации: неверные данные</h2>
-          </>
-        ) : (
-          <>
-            <h2>Успешная авторизация</h2>
-          </>
-        )}
-      </Modal>
-      <Popup opened={opened_popup} close={() => changeOpenedPopup(false)}>
+      <Popup opened={opened_popup} close={() => changeOpenedPopup(false)} status={status}>
         <div className="flex break-words whitespace-pre w-full overflow-auto">
           {popup_content}
         </div>
@@ -112,7 +107,7 @@ export function Auth() {
           <label htmlFor="email">Email*</label>
           <input
             type="email"
-            defaultValue={""}
+            value={email}
             name="email"
             onChange={(e) => {
               changeEmail(e.target.value);
@@ -122,8 +117,9 @@ export function Auth() {
           <label htmlFor="password">Password*</label>
           <input
             type="password"
-            defaultValue={""}
+            value={password}
             name="password"
+            max={48}
             onChange={(e) => {
               changePassword(e.target.value);
             }}
@@ -132,16 +128,16 @@ export function Auth() {
           <input
             type="button"
             value="Отправить данные"
-            className="dark:bg-emerald-700 bg-emerald-800 hover:bg-emerald-900 border-2 border-emerald-950 p-2 rounded-md hover:cursor-pointer text-white dark:text-black"
+            className={"border-2 p-2 rounded-md text-white dark:text-black "+(can_send ? "dark:bg-emerald-700 bg-emerald-800 hover:bg-emerald-900 border-emerald-950 hover:cursor-pointer" : "dark:bg-gray-700 bg-gray-800 border-gray-950")}
             onClick={async () => {
-              if (can_send) await exportData(email, password);
+              exportData(email, password);
             }}
           />
           <div
             id="error-box"
             className="error-box text-red-600 max-w-1/2 text-center"
           >
-            Заполните поля.
+            {error}
           </div>
         </div>
       </div>

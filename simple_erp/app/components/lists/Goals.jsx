@@ -1,6 +1,5 @@
 import AnalyticsButton from "../UI/AnalyticsButton.jsx";
 import Item from "../UI/Item.jsx";
-import Item from "../UI/Item.jsx";
 
 function showType(type) {
   switch (type) {
