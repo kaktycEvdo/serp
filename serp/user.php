@@ -21,6 +21,10 @@ switch($command){
         $q->execute();
         $res = $q->fetch();
 
+        if(!$res){
+            echo "not found";
+            die();
+        } 
         $id = $res[0];
 
         if($id){
@@ -49,7 +53,7 @@ switch($command){
             $q = $pdo->prepare("SELECT id FROM org WHERE name = :name");
             $q->bindParam("name", $post['org_name']);
             if(!$q->execute()) die();
-            $org_id = $q->fetch();
+            $org_id = $q->fetch(PDO::FETCH_COLUMN);
         }
         
         $q = $pdo->prepare("INSERT INTO users(email, password, org_id, role, accepted) VALUES (:email, :password, :org, $role, $accepted)");
@@ -79,5 +83,18 @@ switch($command){
         $q = $pdo->prepare("UPDATE users SET accepted = 1 WHERE id = :id");
         $q->bindParam("id", $id);
         if(!$q->execute()){echo 504; die();}
+        break;
+    }
+    case 'delete':{
+        include_once "org.php";
+
+        $post = $_POST;
+        $id = $post['id'];
+        $user_id = $post['user_id'];
+        if (!getAcception($pdo, $user_id)){echo 403; die();};
+        $q = $pdo->prepare("DELETE FROM users WHERE id = :id");
+        $q->bindParam("id", $id);
+        if(!$q->execute()){echo 504; die();}
+        break;
     }
 }
