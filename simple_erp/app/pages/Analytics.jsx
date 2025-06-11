@@ -49,7 +49,8 @@ export function Analytics() {
       )
       .then((res) => {
         if (res.data != 1) {
-          redirect("/auth");
+          window.location = 'reg';
+          redirect("/reg");
         }
       });
     // live reaction to changing data requires intervals of checking. 2 - seconds, 1000 - milliseconds.

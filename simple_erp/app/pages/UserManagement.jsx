@@ -5,6 +5,7 @@ import axios from "axios";
 import Item from "../components/UI/Item.jsx";
 import UserDetailsModal from "../components/UserDetailsModal.jsx";
 import { host } from "../host.js";
+import UserForm from "../components/UserForm.jsx";
 
 const url_get = host+"get.php?command=getAll&item=users";
 const url_acc = host+"org.php?command=role&id=";
@@ -13,6 +14,7 @@ const url_user = host+"user.php";
 export function UserManagement() {
   const [data, setData] = useState(null);
   const [opened_details, changeOpenedDetails] = useState(false);
+  const [opened_form, changeOpenedForm] = useState(false);
   const [opened_popup, changeOpenedPopup] = useState(false);
   const [status, setStatus] = useState(1);
   const [popup_content, changePopupContent] = useState(null);
@@ -71,7 +73,12 @@ export function UserManagement() {
       </Popup>
       <Modal opened={opened_details} close={() => changeOpenedDetails(false)}>
         <div className="flex break-words whitespace-pre w-full overflow-auto">
-          <UserDetailsModal user={user} url={url_user} makePopup={makePopup} />
+          <UserDetailsModal user={user} url={url_user} makePopup={makePopup} openForm={() => {changeOpenedForm(true); changeOpenedDetails(false)}} />
+        </div>
+      </Modal>
+      <Modal opened={opened_form} close={() => changeOpenedForm(false)}>
+        <div className="flex break-words whitespace-pre w-full overflow-auto">
+          <UserForm user={user} url={url_user} makePopup={makePopup} close={() => changeOpenedForm(false)} />
         </div>
       </Modal>
       <div className="flex max-h-full overflow-y-scroll w-full justify-center items-start">

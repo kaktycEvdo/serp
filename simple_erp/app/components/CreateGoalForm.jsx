@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useState } from "react";
 
 function showType(type) {
@@ -15,7 +16,6 @@ function showType(type) {
 
 export default function CreateGoalForm({
   url,
-  axios,
   close,
   resources,
   thing,

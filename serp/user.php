@@ -7,94 +7,175 @@ $allowed_url = 'http://localhost:5173';
 
 header("Access-Control-Allow-Origin: $allowed_url", true);
 
-if(!isset($_POST['command'])) {echo 504; die;}
+if (!isset($_POST['command'])) {
+    echo 504;
+    die;
+}
 $command = $_POST['command'];
-switch($command){
-    case 'auth':{
+switch ($command) {
+    case 'auth': {
         $post = $_POST;
         $email = $post['email'];
         $password = hash('sha256', $post['password']);
-        
+
         $q = $pdo->prepare("SELECT id FROM users WHERE email = :email and password = :password");
         $q->bindParam('email', $email);
         $q->bindParam('password', $password);
         $q->execute();
         $res = $q->fetch();
 
-        if(!$res){
+        if (!$res) {
             echo "not found";
             die();
-        } 
+        }
         $id = $res[0];
 
-        if($id){
+        if ($id) {
             echo $id;
-        }
-        else{
+        } else {
             echo 500;
             die();
         }
         break;
     }
-    case 'reg':{
+    case 'reg': {
         $post = $_POST;
         $org_id = 0;
         $role = 0;
         $accepted = 0;
-        if($post['create_new_org']){
+        if ($post['create_new_org']) {
             $q = $pdo->prepare("INSERT INTO org(name) VALUES(:name)");
             $q->bindParam("name", $post['org_name']);
-            if(!$q->execute()) die();
+            if (!$q->execute())
+                die();
             $org_id = $pdo->lastInsertId();
             $role = 1;
             $accepted = 1;
-        }
-        else{
+        } else {
             $q = $pdo->prepare("SELECT id FROM org WHERE name = :name");
             $q->bindParam("name", $post['org_name']);
-            if(!$q->execute()) die();
+            if (!$q->execute())
+                die();
             $org_id = $q->fetch(PDO::FETCH_COLUMN);
         }
-        
+
         $q = $pdo->prepare("INSERT INTO users(email, password, org_id, role, accepted) VALUES (:email, :password, :org, $role, $accepted)");
         $password = hash('sha256', $post['password']);
         $q->bindParam('email', $post['email']);
         $q->bindParam('password', $password);
         $q->bindParam('org', $org_id);
-        if(!$q->execute()) die();
+        if (!$q->execute())
+            die();
 
         $id = $pdo->lastInsertId('users');
-        if(!$id){
+        if (!$id) {
             echo 500;
             die();
-        }
-        else{
-            echo $id;    
+        } else {
+            echo $id;
         }
         break;
     }
-    case 'accept':{
+    case 'accept': {
         include_once "org.php";
 
         $post = $_POST;
         $id = $post['id'];
         $user_id = $post['user_id'];
-        if (!getAcception($pdo, $user_id)){echo 403; die();};
+        if (!getAcception($pdo, $user_id)) {
+            echo 403;
+            die();
+        }
         $q = $pdo->prepare("UPDATE users SET accepted = 1 WHERE id = :id");
         $q->bindParam("id", $id);
-        if(!$q->execute()){echo 504; die();}
+        if (!$q->execute()) {
+            echo 504;
+            die();
+        }
         break;
     }
-    case 'delete':{
+    case 'delete': {
         include_once "org.php";
 
         $post = $_POST;
         $id = $post['id'];
         $user_id = $post['user_id'];
-        if (!getAcception($pdo, $user_id)){echo 403; die();};
+        if (!getAcception($pdo, $user_id)) {
+            echo 403;
+            die();
+        }
         $q = $pdo->prepare("DELETE FROM users WHERE id = :id");
         $q->bindParam("id", $id);
-        if(!$q->execute()){echo 504; die();}
+        if (!$q->execute()) {
+            echo 504;
+            die();
+        }
+        break;
+    }
+    case 'role_up': {
+        include_once "org.php";
+
+        $post = $_POST;
+        $id = $post['id'];
+        $user_id = $post['user_id'];
+        if (!getAcception($pdo, $user_id) || getRole($pdo, $user_id) != 1) {
+            echo 403;
+            die();
+        }
+        $q = $pdo->prepare("UPDATE users SET role = 1 WHERE id = :id");
+        $q->bindParam("id", $id);
+        if (!$q->execute()) {
+            echo 504;
+            die();
+        }
+        break;
+    }
+    case 'role_down': {
+        include_once "org.php";
+
+        $post = $_POST;
+        $id = $post['id'];
+        $user_id = $post['user_id'];
+        if (!getAcception($pdo, $user_id) || getRole($pdo, $user_id) != 1) {
+            echo 403;
+            die();
+        }
+        $q = $pdo->prepare("UPDATE users SET role = 0 WHERE id = :id");
+        $q->bindParam("id", $id);
+        if (!$q->execute()) {
+            echo 504;
+            die();
+        }
+        break;
+    }
+    case 'edit':{
+        include_once "org.php";
+
+        $post = $_POST;
+
+        if (!isset($post['user_id'])) {
+            echo 403;
+            die();
+        }
+        $id = $post['id'];
+        $user_id = $post['user_id'];
+        if (!getAcception($pdo, $user_id) || getRole($pdo, $user_id) != 1) {
+            echo 403;
+            die();
+        }
+        
+        $password = hash('sha256', $post['password']);
+
+        $q = $pdo->prepare("UPDATE users SET password = :password, email = :email WHERE id = :id");
+        $q->bindParam("id", $id);
+        $q->bindParam("email", $post['email']);
+        $q->bindParam("password", $password);
+        if (!$q->execute()) {
+            echo 504;
+            die();
+        }
+        echo 200;
+        
         break;
     }
 }

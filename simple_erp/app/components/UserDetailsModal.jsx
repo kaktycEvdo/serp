@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export default function UserDetailsModal({ close, user, url, makePopup }) {
+export default function UserDetailsModal({ close, user, url, makePopup, openForm }) {
   return (
     <div className="flex flex-col w-full justify-center items-center">
       <div className="flex flex-col w-full justify-center items-center">
@@ -34,6 +34,7 @@ export default function UserDetailsModal({ close, user, url, makePopup }) {
                 close();
                 if(res.data == ''){
                   makePopup(0, "Успешное удаление пользователя.");
+                  if(user['id'] == localStorage.getItem('user')){localStorage.removeItem('user')};
                 }
                 else{
                   makePopup(1, "Ошибка удаления пользователя. Вывод: "+res.data);
@@ -43,10 +44,49 @@ export default function UserDetailsModal({ close, user, url, makePopup }) {
             >
               Удалить
             </div>
-            <div className="flex text-white justify-center items-center h-full p-2 bg-amber-700 dark:bg-amber-900 hover:cursor-pointer rounded-md hover:bg-amber-950 border-2 border-amber-950">
+            <div className="flex text-white justify-center items-center h-full p-2 bg-amber-700 dark:bg-amber-900 hover:cursor-pointer rounded-md hover:bg-amber-950 border-2 border-amber-950"
+            onClick={() => openForm()}>
               Изменить
             </div>
-            <div className="flex text-white justify-center items-center h-full p-2 bg-emerald-700 hover:cursor-pointer rounded-md hover:bg-emerald-800 border-2 border-emerald-800">
+            <div className="flex text-white justify-center items-center h-full p-2 bg-emerald-700 hover:cursor-pointer rounded-md hover:bg-emerald-800 border-2 border-emerald-800"
+            onClick={() => {
+              if(user['role']){
+                axios.post(url, {
+                  mode: "cors",
+                  'command': "role_down",
+                  'id': user['id'],
+                  'user_id': localStorage.getItem('user')
+                },{
+                  headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                }).then((res) => {
+                  close();
+                  if(res.data == ''){
+                    makePopup(0, "Успешное понижение пользователя.");
+                  }
+                  else{
+                    makePopup(1, "Ошибка повышения пользователя. Вывод: "+res.data);
+                  }
+                });
+              }
+              else{
+                axios.post(url, {
+                  mode: "cors",
+                  'command': "role_up",
+                  'id': user['id'],
+                  'user_id': localStorage.getItem('user')
+                },{
+                  headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                }).then((res) => {
+                  close();
+                  if(res.data == ''){
+                    makePopup(0, "Успешное повышение пользователя.");
+                  }
+                  else{
+                    makePopup(1, "Ошибка повышения пользователя. Вывод: "+res.data);
+                  }
+                });
+              }
+            }}>
               {user["role"] ? "Понизить" : "Повысить"}
             </div>
           </>
@@ -85,10 +125,10 @@ export default function UserDetailsModal({ close, user, url, makePopup }) {
               }).then((res) => {
                 close();
                 if(res.data == ''){
-                  makePopup(0, "Успешное удаление пользователя.");
+                  makePopup(0, "Успешное принятие пользователя.");
                 }
                 else{
-                  makePopup(1, "Ошибка удаления пользователя. Вывод: "+res.data);
+                  makePopup(1, "Ошибка принятия пользователя. Вывод: "+res.data);
                 }
               });
             }}>

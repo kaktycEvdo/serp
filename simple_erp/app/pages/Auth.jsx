@@ -42,7 +42,7 @@ export function Auth() {
           command: "auth",
         },
         {
-          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          headers: { "Content-Type": "application/x-www-form-urlencoded" }, withCredentials: "include"
         }
       );
       let text = response.data;

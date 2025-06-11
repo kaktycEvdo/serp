@@ -1,4 +1,6 @@
-export default function CreateResourceForm({ url, axios, close, thing }) {
+import axios from "axios";
+
+export default function CreateResourceForm({ url, close, thing }) {
   return (
     <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-center">
       <h3 className="modal-title text-base font-semibold text-gray-900">
