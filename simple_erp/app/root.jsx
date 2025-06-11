@@ -23,7 +23,6 @@ export function Layout({ children }) {
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <YMInitializer accounts={[102575796]} />
-        <noscript><div><img src="https://mc.yandex.ru/watch/102575796" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
         <Meta />
         <Links />
       </head>
