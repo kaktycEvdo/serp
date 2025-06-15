@@ -1,4 +1,5 @@
 import axios from "axios";
+import ModalButton from "./UI/ModalButton";
 
 function returnType(type, full = false) {
   switch (type) {
@@ -84,14 +85,14 @@ export default function DetailsModal({ thing, url, editOpen, close }) {
           <div className="text-center">Подробности не обнаружены</div>
         )}
         <div className="flex w-full justify-around">
-          <div
-            className="hover:cursor-pointer bg-amber-600 p-2 rounded-md text-white"
+          <ModalButton
+            color={"amber"}
+            title={"Изменить"}
             onClick={() => {editOpen(); close()}}
-          >
-            Изменить
-          </div>
-          <div
-            className="hover:cursor-pointer bg-red-700 p-2 rounded-md text-white"
+          />
+          <ModalButton
+            color={"red"}
+            title={"Удалить"}
             onClick={() => {
               axios
                 .delete(
@@ -107,9 +108,7 @@ export default function DetailsModal({ thing, url, editOpen, close }) {
                   close();
                 });
             }}
-          >
-            Удалить
-          </div>
+          />
         </div>
       </div>
     </div>

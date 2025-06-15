@@ -105,7 +105,7 @@ export default function AppendPutResourceForm({
           <div className="px-4 py-3 sm:flex sm:flex-row justify-center sm:px-6 col-start-1 col-end-3">
             <input
               type="submit"
-              className="inline-flex w-full justify-center rounded-md bg-emerald-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-emerald-800 sm:w-auto"
+              className="flex text-white justify-center items-center h-full p-2 bg-emerald-700 hover:cursor-pointer rounded-md hover:bg-emerald-800 border-2 border-emerald-800"
               value={thing ? "Изменить" : "Связать"}
               onClick={() => {
                 let fields = document.querySelectorAll(
