@@ -9,7 +9,7 @@ import {
 import { Header } from "./components/UI/Header.jsx";
 import { Footer } from "./components/UI/Footer.jsx";
 import { YMInitializer } from 'react-yandex-metrika';
-import { Analytics } from "@vercel/analytics/next"
+import { Analytics } from "@vercel/analytics/react"
 
 import stylesheet from "./app.css?url";
 
