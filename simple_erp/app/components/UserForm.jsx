@@ -25,7 +25,7 @@ export default function UserForm({ url, close, user, makePopup }) {
               },
             };
             axios.post(url, body, options).then((res) => {
-                makePopup(res.data != 200, res.data);
+                makePopup(res.data != 200, res.data != 200 ? "Ошибка: "+res.data : "Успешные изменения пользователя!");
                 close();
             });
           }}
