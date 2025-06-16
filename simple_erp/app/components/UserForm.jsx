@@ -1,4 +1,5 @@
 import axios from "axios";
+import ModalInputButton from "./UI/ModalInputButton";
 
 export default function UserForm({ url, close, user, makePopup }) {
     return (
@@ -47,10 +48,9 @@ export default function UserForm({ url, close, user, makePopup }) {
             defaultValue={""}
           />
           <div className="px-4 py-3 sm:flex sm:flex-row justify-center sm:px-6 col-start-1 col-end-3">
-            <input
-              type="submit"
-              className="inline-flex w-full justify-center rounded-md cursor-pointer bg-emerald-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-emerald-800 sm:w-auto"
-              value={"Изменить"}
+            <ModalInputButton
+              color={"emerald"}
+              title={"Изменить"}
             />
           </div>
         </form>
