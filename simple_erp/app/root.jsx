@@ -9,6 +9,7 @@ import {
 import { Header } from "./components/UI/Header.jsx";
 import { Footer } from "./components/UI/Footer.jsx";
 import { YMInitializer } from 'react-yandex-metrika';
+import { Analytics } from "@vercel/analytics/next"
 
 import stylesheet from "./app.css?url";
 
@@ -23,6 +24,7 @@ export function Layout({ children }) {
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <YMInitializer accounts={[102575796]} />
+        <Analytics/>
         <Meta />
         <Links />
       </head>
