@@ -23,12 +23,12 @@ export function Layout({ children }) {
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <YMInitializer accounts={[102575796]} />
-        <Analytics/>
         <Meta />
         <Links />
       </head>
       <body className="flex flex-col h-screen">
+        <YMInitializer accounts={[102575796]} />
+        <Analytics/>
         <Header />
         <div className="flex h-full w-screen justify-center flex-col items-center">
         {children}
