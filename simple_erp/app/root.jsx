@@ -27,8 +27,6 @@ export function Layout({ children }) {
         <Links />
       </head>
       <body className="flex flex-col h-screen">
-        <YMInitializer accounts={[102575796]} />
-        <Analytics/>
         <Header />
         <div className="flex h-full w-screen justify-center flex-col items-center">
         {children}
@@ -42,7 +40,9 @@ export function Layout({ children }) {
 }
 
 export default function App() {
-  return <><Outlet /></>;
+  return <>
+  <YMInitializer accounts={[102575796]} />
+  <Analytics/><Outlet /></>;
 }
 
 export function ErrorBoundary({ error }) {
