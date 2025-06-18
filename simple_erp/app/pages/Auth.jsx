@@ -104,7 +104,7 @@ export function Auth() {
           <p className="text-sm text-gray-500">
             Все обязательные поля отмечены астериском (*)
           </p>
-          <label htmlFor="email">Email*</label>
+          <label htmlFor="email">Электронная почта*</label>
           <input
             type="email"
             value={email}
@@ -114,7 +114,7 @@ export function Auth() {
             }}
             className="bg-white rounded-md text-black p-1 border-2 border-black dark:border-0"
           />
-          <label htmlFor="password">Password*</label>
+          <label htmlFor="password">Пароль*</label>
           <input
             type="password"
             value={password}
