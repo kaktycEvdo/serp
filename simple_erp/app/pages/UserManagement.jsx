@@ -42,12 +42,6 @@ export function UserManagement() {
             redirect("dashboard");
             location = 'dashboard';
           }
-          if (result.headers.getContentType().split("; ")[0] === "text/html") {
-            changePopupContent(
-              "Ошибка на стороне сервера. Вывод: " + result.data
-            );
-            changeOpenedPopup(true);
-          }
         }).catch((error) => {
           if(error.message == 403){
             redirect("dashboard");
