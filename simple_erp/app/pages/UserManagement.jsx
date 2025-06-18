@@ -38,8 +38,8 @@ export function UserManagement() {
         .then((res) => {
           let result = res;
           if(result.data == 403){
-            redirect("auth");
-            location = 'auth';
+            redirect("dashboard");
+            location = 'dashboard';
           }
           if (result.headers.getContentType().split("; ")[0] === "text/html") {
             changePopupContent(
@@ -49,7 +49,7 @@ export function UserManagement() {
           }
         }).catch((error) => {
           if(error.message == 403){
-            redirect("auth");
+            redirect("dashboard");
           }
           changePopupContent(
             "Ошибка при подключении к серверу. Вывод: " + error.message
@@ -77,6 +77,10 @@ export function UserManagement() {
               });
           }, interval)
         );
+    }
+    else{
+      redirect("auth");
+      location = 'auth';
     }
   }, []);
 
