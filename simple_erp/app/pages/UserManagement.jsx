@@ -36,9 +36,25 @@ export function UserManagement() {
           url_acc + user
         )
         .then((res) => {
-          if (res.data != 1) {
-            redirect("/dashboard");
+          let result = res;
+          if(result.data == 403){
+            redirect("auth");
+            location = 'auth';
           }
+          if (result.headers.getContentType().split("; ")[0] === "text/html") {
+            changePopupContent(
+              "Ошибка на стороне сервера. Вывод: " + result.data
+            );
+            changeOpenedPopup(true);
+          }
+        }).catch((error) => {
+          if(error.message == 403){
+            redirect("auth");
+          }
+          changePopupContent(
+            "Ошибка при подключении к серверу. Вывод: " + error.message
+          );
+          changeOpenedPopup(true);
         });
       // live reaction to changing data requires intervals of checking. 2 - seconds, 1000 - milliseconds.
       let interval = 2 * 1000;
