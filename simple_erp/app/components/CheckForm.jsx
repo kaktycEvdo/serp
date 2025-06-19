@@ -134,7 +134,7 @@ export default function CheckForm({ close, data, url }) {
                                             <input
                                               type="number"
                                               value={splitAmount}
-                                              max={amount}
+                                              max={amount+resource['total_amount']}
                                               split={checked.toString()}
                                               className={
                                                 checked
