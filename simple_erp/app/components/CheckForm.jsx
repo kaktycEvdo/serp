@@ -134,7 +134,7 @@ export default function CheckForm({ close, data, url }) {
                                             <input
                                               type="number"
                                               value={splitAmount}
-                                              max={amount+resource['total_amount']}
+                                              max={amount}
                                               split={checked.toString()}
                                               className={
                                                 checked
@@ -143,8 +143,8 @@ export default function CheckForm({ close, data, url }) {
                                                   : "hidden"
                                               }
                                               onChange={(e) => {
-                                                if (e.target.value / 1 <= amount+resource['total_amount']) setSplitAmount(e.target.value);
-                                                else setSplitAmount(amount+resource['total_amount']);
+                                                if (e.target.value / 1 <= amount) setSplitAmount(e.target.value);
+                                                else setSplitAmount(amount);
                                               }}
                                             />
                                           </div>
