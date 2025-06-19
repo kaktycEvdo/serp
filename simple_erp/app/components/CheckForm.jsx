@@ -143,8 +143,8 @@ export default function CheckForm({ close, data, url }) {
                                                   : "hidden"
                                               }
                                               onChange={(e) => {
-                                                if (e.target.value / 1 <= amount) setSplitAmount(e.target.value);
-                                                else setSplitAmount(amount);
+                                                if (e.target.value / 1 <= amount+resource['total_amount']) setSplitAmount(e.target.value);
+                                                else setSplitAmount(amount+resource['total_amount']);
                                               }}
                                             />
                                           </div>
