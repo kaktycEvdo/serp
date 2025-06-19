@@ -111,7 +111,7 @@ export default function CreateResourceForm({ url, close, thing }) {
           <ModalInputButton
             type="submit"
             color={"emerald"}
-            value={"Создать"}
+            title={"Создать"}
           />
         </div>
       </form>

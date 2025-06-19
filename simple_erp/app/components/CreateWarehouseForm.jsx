@@ -62,7 +62,7 @@ export default function CreateWarehouseForm({ url, close, thing }) {
           <ModalInputButton
             type="submit"
             color={"emerald"}
-            value={"Создать"}
+            title={"Создать"}
           />
         </div>
       </form>
